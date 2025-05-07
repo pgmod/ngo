@@ -1,4 +1,4 @@
-module ngo
+module github.com/pgmod/ngo
 
 go 1.24.2
 
