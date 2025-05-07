@@ -1,0 +1,32 @@
+FROM golang:1.24.2-alpine AS builder
+
+ENV CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+WORKDIR /root
+
+# Кеш go модулей
+COPY go.mod go.sum ./
+RUN --mount=type=cache,target=/root/.cache/go-mod \
+    go mod download
+
+# Копируем только нужные части
+COPY cmd cmd
+COPY pkg pkg
+COPY internal internal
+
+# Кеш сборки и сборка бинарника
+RUN --mount=type=cache,target=/gocache \
+    GOCACHE=/gocache \
+    go build -ldflags="-w -s" -o {{name}} ./cmd/main/
+
+# Финальный минимальный образ
+FROM alpine:latest
+
+WORKDIR /
+
+COPY --from=builder /root/{{name}} /{{name}}
+
+EXPOSE 80
+ENTRYPOINT ["/{{name}}"]

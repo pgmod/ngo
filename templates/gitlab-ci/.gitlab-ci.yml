@@ -1,0 +1,34 @@
+variables:
+  IMAGE_NAME: "registry.{{repo}}"
+  DOCKER_BUILDKIT: "1"
+  COMPOSE_DOCKER_CLI_BUILD: "1"
+  CACHE_COMPRESSION_LEVEL: "fast"
+  FF_USE_FASTZIP: "true"
+
+# Кэшируем данные между сборками (например, сохранённый tar-образ)
+cache:
+  key: docker-cache
+  paths:
+    - .docker-cache/
+
+stages:
+  - build
+
+
+build_docker:
+  stage: build
+  script:
+    - echo "Логинимся в реестр Docker"
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - mkdir -p .docker-cache
+    - if [ -f .docker-cache/image.tar ]; then docker load -i .docker-cache/image.tar; fi
+    - docker pull "$IMAGE_NAME:$CI_COMMIT_REF_NAME" || true
+    - |
+      docker build \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
+        --cache-from "$IMAGE_NAME:$CI_COMMIT_REF_NAME" \
+        -t "$IMAGE_NAME:$CI_COMMIT_REF_NAME" .
+    - docker save -o .docker-cache/image.tar "$IMAGE_NAME:$CI_COMMIT_REF_NAME"
+    - docker push "$IMAGE_NAME:$CI_COMMIT_REF_NAME"
+    - docker tag "$IMAGE_NAME:$CI_COMMIT_REF_NAME" "$IMAGE_NAME:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA"
+    - docker push "$IMAGE_NAME:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA"
