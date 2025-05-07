@@ -1,8 +1,9 @@
 package module
 
 import (
-	"ngo/internal/templates"
 	"slices"
+
+	"github.com/pgmod/ngo/internal/templates"
 )
 
 func InitVscode(conf InitConfig) error {

@@ -1,6 +1,8 @@
 package module
 
-import "ngo/internal/templates"
+import (
+	"github.com/pgmod/ngo/internal/templates"
+)
 
 func InitDocker(conf InitConfig) error {
 	err := templates.InsertTemplate("docker", map[string]string{

@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
-	"ngo/internal/config"
+
 	"os"
+
+	"github.com/pgmod/ngo/internal/config"
 )
 
 func main() {

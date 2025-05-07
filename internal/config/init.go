@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
-	"ngo/internal/module"
 	"os"
 	"strings"
+
+	"github.com/pgmod/ngo/internal/module"
 
 	"github.com/spf13/cobra"
 )

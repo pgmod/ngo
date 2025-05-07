@@ -2,8 +2,9 @@ package module
 
 import (
 	"fmt"
-	"ngo/internal/system"
-	"ngo/internal/templates"
+
+	"github.com/pgmod/ngo/internal/system"
+	"github.com/pgmod/ngo/internal/templates"
 )
 
 func InitGit(conf InitConfig) error {

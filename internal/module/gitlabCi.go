@@ -1,6 +1,8 @@
 package module
 
-import "ngo/internal/templates"
+import (
+	"github.com/pgmod/ngo/internal/templates"
+)
 
 func InitGitlabCI(conf InitConfig) error {
 	err := templates.InsertTemplate("gitlab-ci", map[string]string{

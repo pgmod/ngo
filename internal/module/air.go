@@ -2,9 +2,10 @@ package module
 
 import (
 	"fmt"
-	"ngo/internal/system"
-	"ngo/internal/templates"
 	"slices"
+
+	"github.com/pgmod/ngo/internal/system"
+	"github.com/pgmod/ngo/internal/templates"
 )
 
 func InitAir(conf InitConfig) error {
